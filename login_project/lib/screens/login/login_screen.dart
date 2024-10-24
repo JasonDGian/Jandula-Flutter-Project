@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:login_project/domain/models/user_model.dart';
+import 'package:login_project/presentation/providers/user_detail_provider.dart';
 import 'package:login_project/screens/home_screen/home_screen.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -46,6 +49,8 @@ class LoginScreen extends StatelessWidget {
               offset: Offset(5, 5))
         ]);
 
+    var proveedorDatos = UserDetailProvider();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Log in"),
@@ -81,17 +86,21 @@ class LoginScreen extends StatelessWidget {
                       ),
                       // Formulario de introduccion de usuario.
                       _UserTextFormField(
-                          focusnodeUser: focusnodeUser,
-                          textControllerUser: textControllerUser,
-                          txtDecoration: txtDecoration,
-                          textControllerPass: textControllerPass),
+                        focusnodeUser: focusnodeUser,
+                        textControllerUser: textControllerUser,
+                        txtDecoration: txtDecoration,
+                        textControllerPass: textControllerPass,
+                        proveedor: proveedorDatos,
+                      ),
                       //Formulario de contraseña.
                       _PasswordTextFormField(
-                          focusnodeUser: focusnodeUser,
-                          focusnodePass: focusnodePass,
-                          textControllerPass: textControllerPass,
-                          txtDecoration: txtDecoration,
-                          textControllerUser: textControllerUser),
+                        focusnodeUser: focusnodeUser,
+                        focusnodePass: focusnodePass,
+                        textControllerPass: textControllerPass,
+                        txtDecoration: txtDecoration,
+                        textControllerUser: textControllerUser,
+                        proveedor: proveedorDatos,
+                      ),
                       // Boton de login que recoge los valores
                       // almacenados en los formularios de texto.
                       _LoginTextButtonIcon(
@@ -126,20 +135,24 @@ class LoginScreen extends StatelessWidget {
 * Formulario para introducir la contraseña.
 */
 class _UserTextFormField extends StatelessWidget {
-  const _UserTextFormField({
-    required this.focusnodeUser,
-    required this.textControllerUser,
-    required this.txtDecoration,
-    required this.textControllerPass,
-  });
+  const _UserTextFormField(
+      {required this.focusnodeUser,
+      required this.textControllerUser,
+      required this.txtDecoration,
+      required this.textControllerPass,
+      required this.proveedor});
 
   final FocusNode focusnodeUser;
   final TextEditingController textControllerUser;
   final InputDecoration txtDecoration;
   final TextEditingController textControllerPass;
+  final UserDetailProvider proveedor;
 
   @override
   Widget build(BuildContext context) {
+    // Observa al proveedor.
+    context.watch<UserDetailProvider>();
+
     return Column(
       children: [
         const Text("Introduce usuario:"),
@@ -153,14 +166,8 @@ class _UserTextFormField extends StatelessWidget {
           controller: textControllerUser,
           decoration: txtDecoration,
           onFieldSubmitted: (value) {
-            if (textControllerUser.text == textControllerPass.text) {
-              // Texto almacenado en formulario usuario.
-              _callHome(context, textControllerUser.text);
-            } else {
-              textControllerUser.clear();
-              textControllerPass.clear();
-              _showAlertMessage(context);
-            }
+            _inputCheckLoad(proveedor, context, textControllerUser.text,
+                textControllerPass.text);
           },
         )
       ],
@@ -178,6 +185,7 @@ class _PasswordTextFormField extends StatelessWidget {
     required this.textControllerPass,
     required this.txtDecoration,
     required this.textControllerUser,
+    required this.proveedor,
   });
 
   final FocusNode focusnodeUser;
@@ -185,6 +193,7 @@ class _PasswordTextFormField extends StatelessWidget {
   final TextEditingController textControllerPass;
   final InputDecoration txtDecoration;
   final TextEditingController textControllerUser;
+  final UserDetailProvider proveedor;
 
   @override
   Widget build(BuildContext context) {
@@ -200,15 +209,9 @@ class _PasswordTextFormField extends StatelessWidget {
           focusNode: focusnodePass,
           controller: textControllerPass,
           decoration: txtDecoration,
-          onFieldSubmitted: (value) {
-            if (textControllerUser.text == textControllerPass.text) {
-              // Texto almacenado en formulario usuario.
-              _callHome(context, textControllerUser.text);
-            } else {
-              textControllerUser.clear();
-              textControllerPass.clear();
-              _showAlertMessage(context);
-            }
+          onFieldSubmitted: (value) async {
+            _inputCheckLoad(proveedor, context, textControllerUser.text,
+                textControllerPass.text);
           },
         )
       ],
@@ -232,23 +235,31 @@ class _LoginTextButtonIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final proveedorDatos = UserDetailProvider();
+
     return TextButton.icon(
-      onPressed: () {
-        if (textControllerUser.value == textControllerPass.value) {
-          // Texto almacenado en formulario usuario.
-          _callHome(context, textControllerUser.text);
-        } else {
-          // Mensaje de alerta de login fallido.
-          _showAlertMessage(context);
-        }
+      onPressed: () async {
+        await _inputCheckLoad(proveedorDatos, context, textControllerUser.text,
+            textControllerPass.text);
       },
       icon: const Icon(Icons.login),
       label: const Text('Identificate'),
       style: const ButtonStyle(
-          shadowColor: WidgetStatePropertyAll(Colors.black),
           backgroundColor: WidgetStatePropertyAll(Colors.blue),
           foregroundColor: WidgetStatePropertyAll(Colors.white)),
     );
+  }
+}
+
+Future<void> _inputCheckLoad(UserDetailProvider proveedorDatos,
+    BuildContext context, String username, String pass) async {
+  await proveedorDatos.obtenDetallesValidacion();
+
+  if (_userMatchPass(username, pass, proveedorDatos)) {
+    _callHome(context, username);
+  } else {
+    // Mensaje de alerta de login fallido.
+    _showAlertMessage(context);
   }
 }
 
@@ -278,12 +289,20 @@ _showAlertMessage(BuildContext context) {
               ])));
 }
 
-/*
- * Invoca la pantalla homescreen pasando el  
- * usuario con el que se titulará la appbar.
- */
+/// Invoca la pantalla homescreen pasando el usuario con el que se titulará la appbar.
 void _callHome(BuildContext context, String username) {
   // Invocación al router con parametro pasado.
   context
       .goNamed(const HomeScreen().name, pathParameters: {'username': username});
+}
+
+/// Metodo que comprueba si el usuario y contraseña almacenados matchean.
+bool _userMatchPass(
+    String username, String pass, UserDetailProvider proveedor) {
+  for (UserModel user in proveedor.listadoUsuarios) {
+    if (user.nombre == username && user.clave == pass) {
+      return true;
+    }
+  }
+  return false;
 }

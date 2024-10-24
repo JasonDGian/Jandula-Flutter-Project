@@ -4,19 +4,21 @@ import 'package:login_project/domain/models/user_model.dart';
 
 // Proveedor que extiende de change notifier para poder notificar cambios.
 class UserDetailProvider extends ChangeNotifier {
-// TODO: refactorizar.
-//Lista vacia de usuarios para comprobacion inciala.
-
+  //Lista vacia de usuarios para comprobacion inciala.
   List<UserModel> listadoUsuarios = [];
 
   Future<void> obtenDetallesValidacion() async {
+    // Recupera cadena que representa una lista de mapas.
     final respuesta = await GetValidationDetails().getValidationDetails();
-    print("Listado es" + listadoUsuarios.toString());
-    print("La respuesta obtenida es: " + respuesta);
+    // Limpia listado por si acaso.
+    listadoUsuarios.clear();
 
-    //listadoUsuarios = userModelFromJson(respuesta);
-    //listadoUsuarios.add(UserModel.fromJson(respuesta));
+    // Extrae un listado de usuarios del json recibido y lo cuelga al listado de usuarios limpio.
+    List<UserModel> listaRecuperada = userModelFromJson(respuesta);
 
-    print("Listado es" + listadoUsuarios.toString());
+    // Añade la lista de elementos creada a la lista atributo del provider.
+    listadoUsuarios.addAll(listaRecuperada);
+
+    notifyListeners();
   }
 }

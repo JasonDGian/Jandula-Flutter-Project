@@ -11,9 +11,7 @@ class GetValidationDetails {
 
     // Si la respuesta es codigo 200 OK
     if (response.statusCode == 200) {
-    
       return response.data;
-      
     }
 
     // retorno vacio en cualquier otro caso.

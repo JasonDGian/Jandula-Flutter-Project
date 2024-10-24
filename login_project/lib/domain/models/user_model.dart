@@ -4,30 +4,34 @@
 
 import 'dart:convert';
 
-List<UserModel> userModelFromJson(String str) => List<UserModel>.from(json.decode(str).map((x) => UserModel.fromJson(x)));
+List<UserModel> userModelFromJson(String str) =>
+    List<UserModel>.from(json.decode(str).map((x) => UserModel.fromJsonMap(x)));
 
-String userModelToJson(List<UserModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String userModelToJson(List<UserModel> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class UserModel {
-    String id;
-    String nombre;
-    String clave;
+  String id;
+  String nombre;
+  String clave;
 
-    UserModel({
-        required this.id,
-        required this.nombre,
-        required this.clave,
-    });
+  UserModel({
+    required this.id,
+    required this.nombre,
+    required this.clave,
+  });
 
-    factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
-        id: json["id"],
-        nombre: json["nombre"],
-        clave: json["clave"],
+  factory UserModel.fromJsonMap(Map<String, dynamic> json) {
+    return UserModel(
+      id: json["id"],
+      nombre: json["nombre"],
+      clave: json["clave"],
     );
+  }
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "nombre": nombre,
         "clave": clave,
-    };
+      };
 }
