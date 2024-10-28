@@ -114,14 +114,14 @@ class HomeScreen extends StatelessWidget {
         future: controlLogin(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return const Text("Error encountered");
+            context.pop();
           }
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.data == true) {
               return pagina;
             }
             if (snapshot.data == false) {
-              return const Text("Usuario no existe o contraseña incorrecta");
+              context.pop();
             }
             return const Center(child: Text("Error de validacion inesperado"));
           } else {
