@@ -21,4 +21,8 @@ class UserDetailProvider extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  constobtenFuturoDatos() {
+    return obtenDetallesValidacion;
+  }
 }

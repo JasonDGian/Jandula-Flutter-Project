@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:login_project/domain/models/user_model.dart';
+import 'package:login_project/presentation/providers/user_detail_provider.dart';
 
 class HomeScreen extends StatelessWidget {
   final name = "home_screen";
 
-  const HomeScreen({super.key, this.username});
+  const HomeScreen({super.key, this.username, this.pass});
 
   final String? username;
+  final String? pass;
 
   @override
   Widget build(BuildContext context) {
@@ -16,8 +19,27 @@ class HomeScreen extends StatelessWidget {
     // Recoge ancho y largo del mediaquery.
     final mqWidth = size.width;
     final mqHeight = size.height;
+    final proveedor = UserDetailProvider();
 
-    return Scaffold(
+    // Futuro empleado en el builder.
+    Future<bool> controlLogin() async {
+      // Esperamos a que el proveedor obtenga la lista.
+      await proveedor.obtenDetallesValidacion();
+      // Controla el usuario para coincidencias.
+      for (UserModel user in proveedor.listadoUsuarios) {
+        if (user.nombre == username && user.clave == pass) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    final cargando = Center(
+      child: Container(
+          height: 50, width: 50, child: const CircularProgressIndicator()),
+    );
+
+    final pagina = Scaffold(
       appBar: AppBar(
         title: Text(username ?? "null name"),
         actions: [
@@ -87,5 +109,24 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
     );
+
+    return FutureBuilder(
+        future: controlLogin(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Text("Error encountered");
+          }
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.data == true) {
+              return pagina;
+            }
+            if (snapshot.data == false) {
+              return const Text("Usuario no existe o contraseña incorrecta");
+            }
+            return const Center(child: Text("Error de validacion inesperado"));
+          } else {
+            return cargando;
+          }
+        });
   }
 }

@@ -239,8 +239,9 @@ class _LoginTextButtonIcon extends StatelessWidget {
 
     return TextButton.icon(
       onPressed: () async {
-        await _inputCheckLoad(proveedorDatos, context, textControllerUser.text,
-            textControllerPass.text);
+        // await _inputCheckLoad(proveedorDatos, context, textControllerUser.text,
+        //     textControllerPass.text);
+        _callHome(context, textControllerUser.text, textControllerPass.text);
       },
       icon: const Icon(Icons.login),
       label: const Text('Identificate'),
@@ -256,7 +257,7 @@ Future<void> _inputCheckLoad(UserDetailProvider proveedorDatos,
   await proveedorDatos.obtenDetallesValidacion();
 
   if (_userMatchPass(username, pass, proveedorDatos)) {
-    _callHome(context, username);
+    _callHome(context, username, pass);
   } else {
     // Mensaje de alerta de login fallido.
     _showAlertMessage(context);
@@ -290,10 +291,10 @@ _showAlertMessage(BuildContext context) {
 }
 
 /// Invoca la pantalla homescreen pasando el usuario con el que se titulará la appbar.
-void _callHome(BuildContext context, String username) {
+void _callHome(BuildContext context, String username, String pass) {
   // Invocación al router con parametro pasado.
-  context
-      .goNamed(const HomeScreen().name, pathParameters: {'username': username});
+  context.goNamed(const HomeScreen().name,
+      pathParameters: {'username': username, 'pass': pass});
 }
 
 /// Metodo que comprueba si el usuario y contraseña almacenados matchean.

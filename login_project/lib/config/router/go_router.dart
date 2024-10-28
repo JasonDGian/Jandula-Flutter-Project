@@ -20,10 +20,13 @@ final GoRouter myRouter = GoRouter(
           routes: [
             // Pantalla que invocada al hacer login.
             GoRoute(
-              path: '/home_screen/:username',
+              path: '/home_screen/:username:pass',
               name: const HomeScreen().name,
               builder: (context, state) {
-                return HomeScreen(username: state.pathParameters['username']);
+                return HomeScreen(
+                  username: state.pathParameters['username'],
+                  pass: state.pathParameters['pass'],
+                );
               },
             ),
           ]),
