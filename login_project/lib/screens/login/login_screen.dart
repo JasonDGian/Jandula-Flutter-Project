@@ -165,10 +165,7 @@ class _UserTextFormField extends StatelessWidget {
           focusNode: focusnodeUser,
           controller: textControllerUser,
           decoration: txtDecoration,
-          onFieldSubmitted: (value) {
-            _inputCheckLoad(proveedor, context, textControllerUser.text,
-                textControllerPass.text);
-          },
+          onFieldSubmitted: (value) {},
         )
       ],
     );
@@ -209,10 +206,7 @@ class _PasswordTextFormField extends StatelessWidget {
           focusNode: focusnodePass,
           controller: textControllerPass,
           decoration: txtDecoration,
-          onFieldSubmitted: (value) async {
-            _inputCheckLoad(proveedor, context, textControllerUser.text,
-                textControllerPass.text);
-          },
+          onFieldSubmitted: (value) async {},
         )
       ],
     );
@@ -235,8 +229,6 @@ class _LoginTextButtonIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final proveedorDatos = UserDetailProvider();
-
     return TextButton.icon(
       onPressed: () async {
         // await _inputCheckLoad(proveedorDatos, context, textControllerUser.text,
@@ -252,58 +244,9 @@ class _LoginTextButtonIcon extends StatelessWidget {
   }
 }
 
-Future<void> _inputCheckLoad(UserDetailProvider proveedorDatos,
-    BuildContext context, String username, String pass) async {
-  await proveedorDatos.obtenDetallesValidacion();
-
-  if (_userMatchPass(username, pass, proveedorDatos)) {
-    _callHome(context, username, pass);
-  } else {
-    // Mensaje de alerta de login fallido.
-    _showAlertMessage(context);
-  }
-}
-
-/* 
-  * Metodo que invoca una ventana de error que informa al 
-  * usuario de que algo ha fallado en el proceso de login. 
-  */
-_showAlertMessage(BuildContext context) {
-  const botonAceptar = "Aceptar";
-  const tituloError = "Login fallido";
-  const mensajeError = "Usuario o contraseña incorrecta.";
-
-  return showDialog(
-      context: context,
-      builder: (_) => (
-              //Mensaje ventana que muestra.
-              AlertDialog(
-                  title: const Center(child: Text(tituloError)),
-                  content: const Text(mensajeError),
-                  actions: [
-                // Boton que cierra la ventana actual.
-                Center(
-                  child: FilledButton(
-                      onPressed: () => context.pop(),
-                      child: const Text(botonAceptar)),
-                )
-              ])));
-}
-
 /// Invoca la pantalla homescreen pasando el usuario con el que se titulará la appbar.
 void _callHome(BuildContext context, String username, String pass) {
   // Invocación al router con parametro pasado.
   context.goNamed(const HomeScreen().name,
       pathParameters: {'username': username, 'pass': pass});
-}
-
-/// Metodo que comprueba si el usuario y contraseña almacenados matchean.
-bool _userMatchPass(
-    String username, String pass, UserDetailProvider proveedor) {
-  for (UserModel user in proveedor.listadoUsuarios) {
-    if (user.nombre == username && user.clave == pass) {
-      return true;
-    }
-  }
-  return false;
 }
