@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: MaterialApp.router(
-        theme: AppTheme(selectedColor: 1).theme(),
+        theme: AppTheme(selectedColor: 0).theme(),
         debugShowCheckedModeBanner: false,
         title: 'Aplicación flutter',
         routerConfig: myRouter,

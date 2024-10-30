@@ -16,6 +16,15 @@ class HomeScreen extends StatelessWidget {
     // Recoge el tamaño del mediaquery.
     final size = MediaQuery.of(context).size;
 
+    const botonAceptar = "Volver a login";
+    const tituloError = "Login fallido";
+    const mensajeError = "Usuario o contraseña incorrecta.";
+
+    const dialogoMensajeError = LoginErrorDialog(
+        mensajeError: mensajeError,
+        tituloError: tituloError,
+        botonAceptar: botonAceptar);
+
     // Recoge ancho y largo del mediaquery.
     final mqWidth = size.width;
     final mqHeight = size.height;
@@ -34,21 +43,26 @@ class HomeScreen extends StatelessWidget {
       return false;
     }
 
-    final cargando = Center(
-      child: Container(
-          height: 50, width: 50, child: const CircularProgressIndicator()),
+    // Throbber dimensionado.
+    const cargando = Center(
+      child:
+          SizedBox(height: 50, width: 50, child: CircularProgressIndicator()),
     );
 
+    // Pagina devuelta al usuario autenticado.
     final pagina = Scaffold(
       appBar: AppBar(
         title: Text(username ?? "null name"),
         actions: [
-          TextButton.icon(
-              onPressed: () {
-                context.pop();
-              },
-              icon: const Icon(Icons.logout),
-              label: const Text("Cerrar sesión"))
+          Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 40, 0),
+            child: IconButton(
+                tooltip: "Cerrar sesión.",
+                onPressed: () {
+                  context.pop();
+                },
+                icon: const Icon(Icons.logout_outlined)),
+          )
         ],
       ),
       body: Container(
@@ -110,6 +124,7 @@ class HomeScreen extends StatelessWidget {
       ),
     );
 
+    // Future builder para cargar pagina o throbber.
     return FutureBuilder(
         future: controlLogin(),
         builder: (context, snapshot) {
@@ -121,12 +136,43 @@ class HomeScreen extends StatelessWidget {
               return pagina;
             }
             if (snapshot.data == false) {
-              context.pop();
+              return dialogoMensajeError;
             }
-            return const Center(child: Text("Error de validacion inesperado"));
-          } else {
+            return dialogoMensajeError;
+          }
+          // Si la conexión no ha terminado entonces mostrar throbber.
+          else {
             return cargando;
           }
         });
+  }
+}
+
+class LoginErrorDialog extends StatelessWidget {
+  const LoginErrorDialog(
+      {super.key,
+      required this.mensajeError,
+      required this.tituloError,
+      required this.botonAceptar});
+
+  final String mensajeError;
+  final String tituloError;
+  final String botonAceptar;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+        title: Center(child: Text(tituloError)),
+        content: Text(mensajeError),
+        actions: [
+          // Boton que cierra la ventana actual.
+          Padding(
+            padding: const EdgeInsets.all(18.0),
+            child: Center(
+              child: FilledButton(
+                  onPressed: () => context.pop(), child: Text(botonAceptar)),
+            ),
+          )
+        ]);
   }
 }
