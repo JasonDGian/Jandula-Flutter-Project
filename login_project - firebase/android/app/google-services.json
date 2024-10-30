@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "735294905016",
+    "project_id": "proyecto-login-djg",
+    "storage_bucket": "proyecto-login-djg.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:735294905016:android:cf93de560d77e7ebb7724d",
+        "android_client_info": {
+          "package_name": "es.iesjandula.logindjg"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "735294905016-585tgkr2hdjo48rtjshtfhqk7v7jh5gp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcZB6fbcD_g0d37KdOR2X3JsVGPNeOoQM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "735294905016-585tgkr2hdjo48rtjshtfhqk7v7jh5gp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
