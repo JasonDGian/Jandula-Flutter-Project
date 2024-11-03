@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "350157611272",
+    "project_id": "reaktor-issues-test",
+    "storage_bucket": "reaktor-issues-test.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:350157611272:android:f85ddeca380571e39a0cbd",
+        "android_client_info": {
+          "package_name": "es.iesjandula.reaktorissues"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "350157611272-kofp037hl05ktlau0ddogh1gs28sr56f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBho7hNq3uDNZVP_AMjQ8vhMjcQHXntrak"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "350157611272-kofp037hl05ktlau0ddogh1gs28sr56f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
