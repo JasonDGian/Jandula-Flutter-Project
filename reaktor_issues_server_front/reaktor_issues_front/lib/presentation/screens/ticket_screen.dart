@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:reaktor_issues_front/presentation/providers/data_provider.dart';
 import 'package:reaktor_issues_front/presentation/widgets/formulario_descripcion.dart';
 import 'package:reaktor_issues_front/presentation/widgets/selector_fecha.dart';
 import 'package:reaktor_issues_front/presentation/widgets/selector_numero_aula.dart';
@@ -13,12 +15,15 @@ class TicketScreen extends StatelessWidget {
     var formularioDescripcion = const FormularioDescripcion();
     var size = MediaQuery.of(context).size;
 
+    final proveedor = context.watch<DataProvider>();
+    proveedor.buscaIncidencias();
+
     var columnaFormulario = Column(
       children: [
         const Text(
           "Señalar incidencia",
-          style: TextStyle(
-              fontSize: 30, color: const Color.fromARGB(255, 20, 94, 155)),
+          style:
+              TextStyle(fontSize: 30, color: Color.fromARGB(255, 20, 94, 155)),
         ),
         selectorAula,
         selectorFecha,
@@ -44,6 +49,7 @@ class TicketScreen extends StatelessWidget {
       height: 800,
       width: contWidth2,
       color: const Color.fromARGB(255, 11, 88, 133),
+      child: Text(proveedor.listadoString),
     );
 
     var miPagina = Center(

@@ -3,16 +3,18 @@ import 'package:provider/provider.dart';
 import 'package:reaktor_issues_front/presentation/providers/data_provider.dart';
 import 'package:reaktor_issues_front/presentation/screens/ticket_screen.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(
-            create: (context) =>
-                DataProvider(), // añadir llamada inicial al proveedor.
+            create: (context) => DataProvider()
+              ..buscaIncidencias(), // añadir llamada inicial al proveedor.
           )
         ],
         child: const MaterialApp(
