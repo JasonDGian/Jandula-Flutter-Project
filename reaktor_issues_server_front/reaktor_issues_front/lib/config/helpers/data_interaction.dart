@@ -14,7 +14,7 @@ class DataInteraction {
       receiveTimeout: const Duration(milliseconds: 3000)));
 
   // Método para realizar una petición GET a la API de incidencias
-  Future<List<dynamic>> filtraIncidencias() async {
+  Future<List<dynamic>> listaIncidencias() async {
     try {
       // Realizamos la petición GET
       final response = await dio.post('', data: {});

@@ -13,9 +13,10 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(
-            create: (context) => DataProvider()
-              ..buscaIncidencias(), // añadir llamada inicial al proveedor.
-          )
+              lazy: false,
+              create: (context) =>
+                  DataProvider() //..buscaIncidencias() añadir llamada inicial al proveedor.
+              )
         ],
         child: const MaterialApp(
             title: 'Incidencias Reaktor DJG', home: TicketScreen()));
