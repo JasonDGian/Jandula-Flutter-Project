@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
 
 class FormularioDescripcion extends StatelessWidget {
-  const FormularioDescripcion({super.key});
+  // Controlador para el texto.
+  final dynamic paramController;
 
-  // PONER EL CONTROLADOR DE TEXTO Y FUNCION DE SUBMIT
-  // https://bosctechlabs.com/create-multi-line-textfield-input-like-textarea-flutter/
-  // https://youtu.be/Y_1SHNI__6I
+  const FormularioDescripcion({super.key, required this.paramController});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: const SingleChildScrollView(
+      color: const Color.fromARGB(255, 255, 255, 255),
+      child: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(10.0),
           child: TextField(
-            decoration: InputDecoration(
+            controller: paramController,
+            decoration: const InputDecoration(
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
                 labelText: "Descripcion de la incidencia",
-                fillColor: Color.fromARGB(255, 252, 240, 217),
+                fillColor: Color.fromARGB(255, 247, 255, 254),
                 filled: true),
             keyboardType: TextInputType.multiline,
-            minLines: 4,
-            maxLines: 4,
+            minLines: 2,
+            maxLines: 5,
           ),
         ),
       ),

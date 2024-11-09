@@ -1,36 +1,95 @@
 // Importamos el paquete dio.
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:reaktor_issues_front/domain/models/incidencia_dto.dart';
+import 'package:reaktor_issues_front/shared/data/data_constants.dart';
 
 class DataInteraction {
   final Dio dio = Dio(BaseOptions(
-      // URL base de las peticiones, ubicacion raiz.
-      baseUrl: "http://localhost:8888/incidencias",
-
-      // Si la conexión no se puede establecer dentro de este tiempo, se lanzará una excepción.
+      baseUrl: DataConstants.urlAPI,
+      headers: {
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+      },
       connectTimeout: const Duration(seconds: 5),
-
-      // Se utiliza para establecer el tiempo máximo que dio esperará para
-      // recibir una respuesta después de que se haya establecido una conexión.
       receiveTimeout: const Duration(milliseconds: 3000)));
 
-  // Método para realizar una petición GET a la API de incidencias
   Future<List<dynamic>> listaIncidencias() async {
     try {
-      // Realizamos la petición GET
-      final response = await dio.post('', data: {});
+      final response = await dio.post("/incidencias", data: {});
 
-      // Comprobamos el estado de la respuesta
-      if (response.statusCode == 200) {
-        // Devolvemos la lista de incidencias
+      // Si la API responde 200
+      if (response.statusCode == 201) {
+        debugPrint(response.toString());
         return response.data;
-      } else {
-        throw Exception(
-            "Error al obtener las incidencias: ${response.statusCode}");
       }
-    } catch (e) {
-      // Si hay un error, lo capturamos e imprimimos
-      print("Error en la petición POST: $e");
+      if (response.statusCode == 200) {
+        debugPrint(response.toString());
+        return response.data;
+      }
+      debugPrint("Code returned not 200 nor 201");
       return [];
+    } catch (error) {
+      debugPrint(error.toString());
+      return [];
+    }
+  }
+
+  // Metodo explicito para crear nuevas incidencias.
+  // Recibe numero de aula descripcion y correeo docente porque el resto ded elementos están implementados en el backedn.
+  Future<void> crearIncidencia(
+      String numeroAula, String descripcion, String correoDocente) async {
+    try {
+      final Map<String, dynamic> header = {
+        "correo-docente": correoDocente.toString()
+      };
+
+      final response = await dio.put("/incidencias",
+          data: {
+            "numeroAula": numeroAula,
+            "correoDocente": correoDocente,
+            "descripcionIncidencia": descripcion
+            //"fechaIncidencia": fechaIncidencia
+          },
+          options: Options(headers: header));
+
+      // Si la API responde 200
+      if (response.statusCode == 201) {
+        debugPrint("Creada con exito");
+      }
+      if (response.statusCode == 200) {
+        debugPrint("Modificada con exito");
+      }
+    } catch (error) {
+      debugPrint(error.toString());
+    }
+  }
+
+  Future<void> modificarIncidencia(IncidenciaDto incidencia) async {
+    try {
+      final Map<String, dynamic> header = {
+        "correo-docente": incidencia.correoDocente.toString()
+      };
+      final response = await dio.put("/incidencias",
+          data: {
+            "numeroAula": incidencia.numeroAula,
+            "correoDocente": incidencia.correoDocente,
+            "fechaIncidencia":
+                incidencia.fechaIncidencia.millisecondsSinceEpoch,
+            "descripcionIncidencia": incidencia.descripcionIncidencia,
+            "estadoIncidencia": incidencia.estadoIncidencia,
+            "comentario": incidencia.comentario
+          },
+          options: Options(headers: header));
+
+      if (response.statusCode == 201) {
+        debugPrint("Codigo 201");
+      }
+      if (response.statusCode == 200) {
+        debugPrint("Codigo 200");
+      }
+    } catch (error) {
+      debugPrint(error.toString());
     }
   }
 }

@@ -11,10 +11,21 @@ List<IncidenciaDto> incidenciaDtoFromJson(String str) =>
 String incidenciaDtoToJson(List<IncidenciaDto> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
+// Metodo que genera una versión "vacia" del modelo incidencia.
+generaVacia() {
+  return IncidenciaDto(
+      numeroAula: "",
+      correoDocente: "",
+      fechaIncidencia: DateTime.now(),
+      descripcionIncidencia: "",
+      estadoIncidencia: "",
+      comentario: "");
+}
+
 class IncidenciaDto {
   String numeroAula;
   String correoDocente;
-  String fechaIncidencia;
+  DateTime fechaIncidencia;
   String descripcionIncidencia;
   String estadoIncidencia;
   String comentario;
@@ -31,7 +42,8 @@ class IncidenciaDto {
   factory IncidenciaDto.fromJson(Map<String, dynamic> json) => IncidenciaDto(
         numeroAula: json["numeroAula"],
         correoDocente: json["correoDocente"],
-        fechaIncidencia: json["fechaIncidencia"],
+        fechaIncidencia:
+            DateTime.fromMillisecondsSinceEpoch(json["fechaIncidencia"]),
         descripcionIncidencia: json["descripcionIncidencia"],
         estadoIncidencia: json["estadoIncidencia"],
         comentario: json["comentario"],
@@ -40,7 +52,8 @@ class IncidenciaDto {
   Map<String, dynamic> toJson() => {
         "numeroAula": numeroAula,
         "correoDocente": correoDocente,
-        "fechaIncidencia": fechaIncidencia,
+        "fechaIncidencia":
+            DateTime.parse(fechaIncidencia.toString()).microsecondsSinceEpoch,
         "descripcionIncidencia": descripcionIncidencia,
         "estadoIncidencia": estadoIncidencia,
         "comentario": comentario,

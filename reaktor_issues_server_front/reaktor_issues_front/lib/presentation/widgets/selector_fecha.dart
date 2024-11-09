@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class SelectorFecha extends StatelessWidget {
-  const SelectorFecha({super.key});
+  const SelectorFecha({super.key, required this.controller});
+
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
-    final controladorTexto = TextEditingController();
-
     Future<void> seleccionaFecha(context) async {
       DateTime? seleccionada = await showDatePicker(
           context: context,
@@ -15,7 +15,7 @@ class SelectorFecha extends StatelessWidget {
           lastDate: DateTime(2124));
 
       if (seleccionada != null) {
-        controladorTexto.text = seleccionada
+        controller.text = seleccionada
             .toString()
             .split(" ")[0]; //controlar el formato tostring
       }
@@ -25,7 +25,7 @@ class SelectorFecha extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: TextField(
-          controller: controladorTexto,
+          controller: controller,
           decoration: inputDecor,
           readOnly: true,
           onTap: () {

@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'package:reaktor_issues_front/presentation/providers/data_provider.dart';
 
 class SelectorNumeroAula extends StatefulWidget {
-  const SelectorNumeroAula({super.key});
+  const SelectorNumeroAula({super.key, required this.funcion});
+
+  // Especificamos el tipo de la función
+  final Function(String) funcion;
 
   @override
   _SelectorNumeroAulaState createState() => _SelectorNumeroAulaState();
 }
 
 class _SelectorNumeroAulaState extends State<SelectorNumeroAula> {
-  String aulaSeleccionada = "0.1";
+  String aulaSeleccionada = "default";
 
   @override
   Widget build(BuildContext context) {
@@ -21,17 +25,19 @@ class _SelectorNumeroAulaState extends State<SelectorNumeroAula> {
       children: [
         const Text("Numero de aula: "),
         const SizedBox(
-          width: 30,
+          width: 5,
         ),
         DropdownButton<String>(
           icon: const Icon(Icons.arrow_drop_down_circle),
           value: aulaSeleccionada,
           items: proveedor.entradasNumAula,
           // Funcion que se triggerea al cambiar
-          onChanged: (newValue) {
+          onChanged: (nuevoValor) {
             setState(() {
-              aulaSeleccionada = newValue!;
+              aulaSeleccionada = nuevoValor!;
             });
+            // llamada a la funcion pasada por parametro.
+            widget.funcion(nuevoValor!);
           },
         )
       ],
