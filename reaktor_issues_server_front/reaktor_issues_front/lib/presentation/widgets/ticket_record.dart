@@ -77,23 +77,18 @@ class TicketRecord extends StatelessWidget {
       decoration: _decoracionBasadaEnEstado(),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           botonesAccion,
-          Expanded(
-              child:
-                  _columnaCampo("Estado", Text(incidencia.estadoIncidencia))),
-          Expanded(
-              child: _columnaCampo("Usuario", Text(incidencia.correoDocente))),
+          _columnaCampo("Estado", Text(incidencia.estadoIncidencia)),
+          _columnaCampo("Usuario", Text(incidencia.correoDocente)),
           _columnaCampo("Aula", Text(incidencia.numeroAula)),
-          Expanded(
-            // este estaba en un flexible 4
-            child: _columnaCampo(
-                "Descripción", Text(incidencia.descripcionIncidencia)),
-          ),
-          Expanded(
-              child: _columnaCampo(
-                  "Fecha", Text(incidencia.fechaIncidencia.toString()))),
-          Expanded(
+          _columnaCampo("Descripción", Text(incidencia.descripcionIncidencia)),
+          _columnaCampo("Fecha", Text(incidencia.fechaIncidencia.toString())),
+          ClipRRect(
+              borderRadius: const BorderRadius.only(
+                  topRight: Radius.circular(15),
+                  bottomRight: Radius.circular(15)),
               child: _columnaCampo("Comentario", Text(incidencia.comentario))),
         ],
       ),
@@ -128,33 +123,35 @@ class TicketRecord extends StatelessWidget {
 
 /// Devuelve un Widget que representa un campo en el registro de incidencias.
 Widget _columnaCampo(String titulo, dynamic valor) {
-  return Column(
-    children: [
-      Container(
-        // decoration: BoxDecoration(
-        //     border: Border.all(color: Colors.black), color: Colors.white),
+  return Expanded(
+    child: Column(
+      children: [
+        Container(
+          // decoration: BoxDecoration(
+          //     border: Border.all(color: Colors.black), color: Colors.white),
 
-        //width: double.infinity,
-        padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
-        color: Colors.white,
-        child: Center(
-          child: Text(
-            overflow: TextOverflow.ellipsis,
-            softWrap: false,
-            maxLines: 1,
-            titulo,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
+          //width: double.infinity,
+          padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+          color: Colors.white,
+          child: Center(
+            child: Text(
+              overflow: TextOverflow.ellipsis,
+              softWrap: false,
+              maxLines: 1,
+              titulo,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),
-      ),
-      Container(
-        color: Colors.amber,
-        //decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-        padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-        child: valor,
-      ),
-    ],
+        Container(
+          //color: Colors.amber,
+          //decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+          padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+          child: valor,
+        ),
+      ],
+    ),
   );
 }
