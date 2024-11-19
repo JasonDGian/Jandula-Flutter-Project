@@ -179,7 +179,7 @@ class TicketScreen extends StatelessWidget {
       actions: [
         Text(usuarioAppbar),
         const SizedBox(width: 20),
-        const SignOutButton()
+        const SignOutButton() // personalizar este boton
       ],
     );
 

@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:reaktor_issues_front/firebase_options.dart';
 import 'package:reaktor_issues_front/presentation/providers/data_provider.dart';
 import 'package:reaktor_issues_front/presentation/screens/auth_gate.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(

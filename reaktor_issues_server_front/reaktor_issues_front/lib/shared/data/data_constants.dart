@@ -1,4 +1,8 @@
 class DataConstants {
+  /* Listado de admins */
+  
+
+
   /* -------------------------- Ticket Screen Constants ----------------------------- */
   // Titulo del formulario para crear incidencias en TicketScreen.
   static const tituloFormularioIncidencias = 'Señalar incidencias';
@@ -37,4 +41,7 @@ class DataConstants {
 
   static const avisoParrafo3 =
       "Cualquier intento de acceso no autorizado o actividad sospechosa puede resultar en acciones disciplinarias o legales conforme a las leyes vigentes. Si usted no cuenta con la autorización pertinente, se le solicita abstenerse de intentar acceder a esta plataforma. Su uso está restringido exclusivamente a personas autorizadas; cualquier otro uso es considerado una violación de la seguridad del sistema.";
+
+
+
 }
