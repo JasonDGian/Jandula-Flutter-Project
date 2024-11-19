@@ -9,41 +9,43 @@ class BeachParkScreen extends StatelessWidget {
     var size = MediaQuery.of(context).size;
 
     // Row de navegacion.
-    var navigationRow = Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back)),
-              Image.asset("assets/img/logo.png"),
-              IconButton(onPressed: (){}, icon: Icon(Icons.notifications_outlined))
-            ],
-          );
-
-    // Estilo botones naranja.
-    const decoracionBotones = BoxDecoration(
-      color: Colors.orange);
-    
+    var navigationRow = SizedBox(
+      width: size.width*0.9,
+      child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_back), color: Colors.white),
+                Image.asset("assets/img/logo.png", height: size.height*.2,),
+                IconButton(onPressed: (){}, icon: const Icon(Icons.notifications_outlined), color: Colors.white)
+              ],
+            ),
+    );
+   
     const decoracionTextoBotones = TextStyle(
       color: Colors.white,
     );
 
-    var buttonRow = Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                decoration: const BoxDecoration(
-                  color: Colors.orange,
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(25), bottomLeft: Radius.circular(25))),
-                child: TextButton.icon(onPressed: (){}, label: const Text("Buscar", style: decoracionTextoBotones), icon: const Icon(Icons.search, color: Colors.white,),),
-              ),
-              const SizedBox(width: 1,),
-              Container(
-                decoration: const BoxDecoration(
-                  color: Colors.orange,
-                  borderRadius: BorderRadius.only(topRight: Radius.circular(25), bottomRight: Radius.circular(25))),
-                child: TextButton.icon(onPressed: (){}, label: const Text("Mis entradas", style: decoracionTextoBotones), icon: const Icon(Icons.ad_units_outlined, color: Colors.white,),),
-              )
-            ],
-          );
+    var buttonRow = SizedBox(
+      width: size.width*0.95,
+      child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.orange,
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(25), bottomLeft: Radius.circular(25))),
+                  child: TextButton.icon(onPressed: (){}, label: const Text("Buscar", style: decoracionTextoBotones), icon: const Icon(Icons.search, color: Colors.white,),),
+                ),
+                const SizedBox(width: 1,),
+                Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.orange,
+                    borderRadius: BorderRadius.only(topRight: Radius.circular(25), bottomRight: Radius.circular(25))),
+                  child: TextButton.icon(onPressed: (){}, label: const Text("Mis entradas", style: decoracionTextoBotones), icon: const Icon(Icons.ad_units_outlined, color: Colors.white,),),
+                )
+              ],
+            ),
+    );
     var scsvRowAtraccionesRestaurantes = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -89,7 +91,7 @@ class BeachParkScreen extends StatelessWidget {
 
     return Scaffold(
       body: Container(
-        color: Colors.cyan,
+        color: const Color.fromARGB(255, 8, 42, 94),
         child: Column(
           children: [
             // Elementos fijos
