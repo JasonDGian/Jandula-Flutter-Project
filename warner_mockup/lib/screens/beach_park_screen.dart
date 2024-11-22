@@ -7,11 +7,19 @@ class BeachParkScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
+    // Decoracion botones navbar.
     const decoracionTextoBotones = TextStyle(
       color: Colors.white,
     );
 
-    _entradaMenu(icono, String texto, funcion) {
+    // Decoracion contenedor botones naranja.
+    var decorationContenedorNavbar = const BoxDecoration(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(25), topRight: Radius.circular(25)),
+        color: Color.fromARGB(255, 255, 255, 255));
+
+    // Devuelve un ListTile personalizado.
+    entradaMenu(icono, String texto, funcion) {
       return ListTile(
         leading: Icon(icono),
         title: Text(texto),
@@ -20,133 +28,43 @@ class BeachParkScreen extends StatelessWidget {
       );
     }
 
-    gradienteNegro() {
-      return const LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: [
-          Colors.black, // Color negro en la parte superior
-          Colors.transparent, // Transparente en la parte inferior
-        ],
-      );
-    }
-
+    var anchoImagenesTop = size.width * 0.42;
     var listaEntradasMenu = [
-      // Fila de imagenes Fuente + Restaurantes.
+      // FILA COMPUESTA POR CONTENEDORES ATRACCIONES + RESTAURANTES
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Stack imagen Fuente
-          Stack(
-            children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(25)),
-                child: Container(
-                    width: size.width * 0.40,
-                    child: Image.asset("assets/img/Fuente.png",
-                        fit: BoxFit.cover)),
-              ),
-              Positioned.fill(
-                child: Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                        colors: [Colors.black, Colors.transparent],
-                        end: FractionalOffset.bottomCenter,
-                        begin: FractionalOffset.topCenter),
-                  ),
-                ),
-              ),
-              const Positioned(
-                  top: 20,
-                  left: 20,
-                  child: Text(
-                    "Atracciones",
-                    style: TextStyle(color: Colors.white),
-                  )),
-            ],
-          ),
-          SizedBox(
+          // Stack imagen ATRACCIONES -----------------------------------
+          _contenedorImagenGradiente(
+              anchoImagenesTop, "Atracciones", "assets/img/Fuente.png"),
+          // SIZEDBOX SEPARADOR
+          const SizedBox(
             width: 10,
           ),
-          // Stack imagen Restaurante
-          Stack(
-            children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(25)),
-                child: Container(
-                    width: size.width * 0.40,
-                    child: Image.asset("assets/img/restaurantes.png",
-                        fit: BoxFit.fill)),
-              ),
-              Positioned.fill(
-                child: Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                        colors: [Colors.black, Colors.transparent],
-                        end: FractionalOffset.bottomCenter,
-                        begin: FractionalOffset.topCenter),
-                  ),
-                ),
-              ),
-              const Positioned(
-                  top: 20,
-                  left: 20,
-                  child: Text(
-                    "Restaurantes",
-                    style: TextStyle(color: Colors.white),
-                  )),
-            ],
-          ),
+          // Stack imagen RESTAURANTE -----------------------------------
+          _contenedorImagenGradiente(
+              anchoImagenesTop, "Restaurantes", "assets/img/restaurantes.png"),
         ],
       ),
       Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        // SIZEDBOX SEPARADOR
         const SizedBox(
           height: 15,
         ),
-        Stack(
-          children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.all(Radius.circular(25)),
-              child: Container(
-                  width: size.width * 0.80,
-                  child: Image.asset("assets/img/ParqueMapa.png",
-                      fit: BoxFit.fill)),
-            ),
-            Positioned.fill(
-              child: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                      colors: [Colors.black, Colors.transparent],
-                      end: FractionalOffset.bottomCenter,
-                      begin: FractionalOffset.topCenter),
-                ),
-              ),
-            ),
-            const Positioned(
-                top: 20,
-                left: 20,
-                child: Text(
-                  "Restaurantes",
-                  style: TextStyle(color: Colors.white),
-                )),
-          ],
-        ),
+        // Stack imagen MAPA -----------------------------------
+        _contenedorImagenGradiente(
+            size.width * 0.84, "Restaurantes", "assets/img/ParqueMapa.png"),
+        // SIZEDBOX SEPARADOR
         const SizedBox(
           height: 15,
         ),
       ]),
-      _entradaMenu(Icons.storefront_outlined, "Tienda", () {}),
-      _entradaMenu(Icons.map_outlined, "Cómo llegar", () {}),
-      _entradaMenu(Icons.calendar_month_outlined, "Horario de apertura", () {}),
-      _entradaMenu(Icons.roller_shades_sharp, "Otros servicios", () {}),
-      _entradaMenu(
-          Icons.sticky_note_2_sharp, "Normas de funcionamiento", () {}),
+      entradaMenu(Icons.storefront_outlined, "Tienda", () {}),
+      entradaMenu(Icons.map_outlined, "Cómo llegar", () {}),
+      entradaMenu(Icons.calendar_month_outlined, "Horario de apertura", () {}),
+      entradaMenu(Icons.roller_shades_sharp, "Otros servicios", () {}),
+      entradaMenu(Icons.sticky_note_2_sharp, "Normas de funcionamiento", () {}),
     ];
-
-    var decoration = const BoxDecoration(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(25), topRight: Radius.circular(25)),
-        color: Color.fromARGB(255, 255, 255, 255));
 
     return Scaffold(
       body: Container(
@@ -174,7 +92,7 @@ class BeachParkScreen extends StatelessWidget {
             ),
             // Contenedor de barra de botones "Buscar" y "Mis entradas"
             Container(
-                decoration: decoration,
+                decoration: decorationContenedorNavbar,
                 padding: const EdgeInsets.all(10),
                 child: SizedBox(
                   child: Row(
@@ -182,6 +100,7 @@ class BeachParkScreen extends StatelessWidget {
                     children: [
                       // Contenedor de boton "Buscar"
                       Container(
+                        width: anchoImagenesTop,
                         decoration: const BoxDecoration(
                             color: Colors.orange,
                             borderRadius: BorderRadius.only(
@@ -198,10 +117,11 @@ class BeachParkScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(
-                        width: 1,
+                        width: 2,
                       ),
                       // Contenedor de boton "Mis entradas"
                       Container(
+                        width: anchoImagenesTop,
                         decoration: const BoxDecoration(
                             color: Colors.orange,
                             borderRadius: BorderRadius.only(
@@ -237,4 +157,44 @@ class BeachParkScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+_contenedorImagenGradiente(anchoImagen, String textoCartel, String rutaImagen) {
+  // Listado empleado en el ListViewBuilder como fuente para las entradas.
+  const borderRadiusImagenes = BorderRadius.all(Radius.circular(10));
+
+  // Estilo de texto para la fuente de las imagenes.
+  const estiloTextoImagenes = TextStyle(color: Colors.white, fontSize: 20);
+
+  // Decoracion contenedores imagenes (ATRACCIONES, RESTAURANTES, MAPA)
+  const boxDecorationGradiente = BoxDecoration(
+    gradient: LinearGradient(
+        colors: [Colors.black, Colors.transparent],
+        end: FractionalOffset.bottomCenter,
+        begin: FractionalOffset.topCenter),
+  );
+
+  return ClipRRect(
+    borderRadius: borderRadiusImagenes,
+    child: Stack(
+      children: [
+        SizedBox(
+            width: anchoImagen, // Ancho (double) que recibe por parametro.
+            child: Image.asset(rutaImagen,
+                fit: BoxFit.cover)), // Ruta que recibe por parametro.
+        Positioned.fill(
+          child: Container(
+            decoration: boxDecorationGradiente,
+          ),
+        ),
+        Positioned(
+            top: 20,
+            left: 20,
+            child: Text(
+              textoCartel, // Texto que recibe por parametro.
+              style: estiloTextoImagenes,
+            )),
+      ],
+    ),
+  );
 }
