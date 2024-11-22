@@ -1,7 +1,34 @@
 import 'package:flutter/material.dart';
 
-class BeachParkScreen extends StatelessWidget {
+class BeachParkScreen extends StatefulWidget {
   const BeachParkScreen({super.key});
+
+  @override
+  State<BeachParkScreen> createState() => _BeachParkScreenState();
+}
+
+class _BeachParkScreenState extends State<BeachParkScreen> {
+  // Declara el scrollController.
+  final scrollController = ScrollController();
+  var scrollAlMaximo = false;
+
+  // Sobreescribe el inicializador de estado de la clase superior antes de inicializarse.
+  @override
+  initState() {
+    super.initState();
+
+    // Escuchador de evento para ir registrando la posicion del scroll.
+    scrollController.addListener(
+      () {
+        // Actualiza el estado del widget.
+        setState(() {
+          // asignacion de variable que representa el valor del scroll.
+          scrollAlMaximo = (scrollController.position.pixels ==
+              scrollController.position.maxScrollExtent);
+        });
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +55,12 @@ class BeachParkScreen extends StatelessWidget {
       );
     }
 
+    // Define el ancho de las imagenes de la fila superior.
     var anchoImagenesTop = size.width * 0.42;
+
+    // Define el ancho de la imagen de la fila inferior.
+    var anchoImageneBottom = size.width * 0.84;
+
     var listaEntradasMenu = [
       // FILA COMPUESTA POR CONTENEDORES ATRACCIONES + RESTAURANTES
       Row(
@@ -53,7 +85,7 @@ class BeachParkScreen extends StatelessWidget {
         ),
         // Stack imagen MAPA -----------------------------------
         _contenedorImagenGradiente(
-            size.width * 0.84, "Restaurantes", "assets/img/ParqueMapa.png"),
+            anchoImageneBottom, "Restaurantes", "assets/img/ParqueMapa.png"),
         // SIZEDBOX SEPARADOR
         const SizedBox(
           height: 15,
@@ -142,15 +174,30 @@ class BeachParkScreen extends StatelessWidget {
                 )),
             // Caja de elementos deslizables.
             Expanded(
-              child: Container(
-                color: const Color.fromARGB(255, 255, 255, 255),
-                child: ListView.builder(
-                  itemCount: listaEntradasMenu.length,
-                  itemBuilder: (context, index) {
-                    return listaEntradasMenu[index];
-                  },
+              child: Stack(children: [
+                Container(
+                  color: const Color.fromARGB(255, 255, 255, 255),
+                  child: ListView.builder(
+                    controller: scrollController,
+                    itemCount: listaEntradasMenu.length,
+                    itemBuilder: (context, index) {
+                      return listaEntradasMenu[index];
+                    },
+                  ),
                 ),
-              ),
+                // Postiones que depende de la cariable 'scrollAlMaximo'
+                Positioned(
+                  bottom: 0,
+                  child: scrollAlMaximo
+                      ? const SizedBox() // Caja vacia.
+                      : Container(
+                          color: const Color.fromARGB(255, 221, 215, 215),
+                          width: size.width,
+                          height: 40,
+                          child: const Icon(Icons.arrow_downward_outlined),
+                        ),
+                )
+              ]),
             ),
           ],
         ),
@@ -159,6 +206,9 @@ class BeachParkScreen extends StatelessWidget {
   }
 }
 
+// Metodo usado para generar cajas con imagen de fondo, un gradiente
+// negro vertical y un titulo. Recibe el titulo y la url del asset en
+// forma de String y el ancho que se desea dar a la imagen.
 _contenedorImagenGradiente(anchoImagen, String textoCartel, String rutaImagen) {
   // Listado empleado en el ListViewBuilder como fuente para las entradas.
   const borderRadiusImagenes = BorderRadius.all(Radius.circular(10));
