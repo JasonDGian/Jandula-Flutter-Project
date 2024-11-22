@@ -30,6 +30,13 @@ class _BeachParkScreenState extends State<BeachParkScreen> {
     );
   }
 
+  // Metodo de "dispose" para liberar recursos y reiniciar estado.
+  @override
+  void dispose() {
+    scrollController.dispose(); // Dispose del controlador
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -103,19 +110,22 @@ class _BeachParkScreenState extends State<BeachParkScreen> {
         color: const Color.fromARGB(255, 8, 42, 94),
         child: Column(
           children: [
-            // Elementos fijos
+            // Fila de elementos que fungen de pseudo-APPBAR.
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                // Boton icono para retroceder.
                 IconButton(
                     onPressed: () {},
                     icon: const Icon(Icons.arrow_back),
                     color: Colors.white),
+                // Logo mostrado en el hero.
                 Image.asset(
                   "assets/img/logo.png",
                   height: size.height * 0.2,
                 ),
+                // Boton igono de notificaciones.
                 IconButton(
                     onPressed: () {},
                     icon: const Icon(Icons.notifications_outlined),
@@ -172,6 +182,7 @@ class _BeachParkScreenState extends State<BeachParkScreen> {
                     ],
                   ),
                 )),
+
             // Caja de elementos deslizables.
             Expanded(
               child: Stack(children: [

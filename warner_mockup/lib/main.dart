@@ -9,7 +9,7 @@ class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
   Future<bool> getData() async {
-    await Future.delayed(const Duration(seconds: 0));
+    await Future.delayed(const Duration(seconds: 2));
     return true;
   }
 
@@ -45,7 +45,14 @@ class MainApp extends StatelessWidget {
           else {
             return Stack(
               children: [
-                Image.asset("assets/img/fondoInicial.png"),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  child: Image.asset(
+                    "assets/img/fondoInicial.png",
+                    fit: BoxFit.cover,
+                  ),
+                ),
                 const Center(
                     child: CircularProgressIndicator(
                   color: Colors.amber,
